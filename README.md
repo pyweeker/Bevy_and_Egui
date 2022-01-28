@@ -6,6 +6,9 @@ DONE
 + rotation
 + translation : introducing queryset due to 2 query on &mut Transform
 
++ scale, dirty code in stroke paint
+
+
 
 //mut queryRot: Query<(&mut Transform, &RotRight)>,
 //mut queryVertimov: Query<(&mut Transform, &Vertimov)>,
@@ -21,7 +24,6 @@ DONE
 
 TODO
 - colors
-- size
 - display info / hovering
 - single select / click
 - multiselect / click and drag
