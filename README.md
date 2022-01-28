@@ -7,6 +7,7 @@ DONE
 + translation : introducing queryset due to 2 query on &mut Transform
 
 + scale, dirty code in stroke paint
++ change color to GOLD when touching strocke widget because problem conversion <== expected enum `bevy::prelude::Color`, found struct `Color32`
 
 
 
