@@ -5,6 +5,11 @@ const BEVY_TEXTURE_ID: u64 = 0;
 
 const BRICK_COLOR: Color = Color::rgb(0.7, 0.7, 0.7);
 
+
+#[derive(Component)]
+struct RotRight; 
+
+
 fn main() {
     App::new()
         .insert_resource(ClearColor(Color::rgb(0.0, 0.0, 0.0)))
@@ -24,6 +29,7 @@ fn main() {
 struct UiState {
     //label: String,
     value: f32,
+    rotval: f32,
     //painting: Painting,
     inverted: bool,
 
@@ -36,14 +42,23 @@ impl Default for UiState {
         
         //UiState { painting: Painting::default() }
         //UiState { label: "the_label".to_string(), value: 3.5, inverted: true, name: "the_name".to_string(), age: 18, }
-        UiState { value: 3.5, inverted: true, name: "the_name".to_string(), age: 18, }
+        UiState { value: 3.5, rotval: 0.0, inverted: true, name: "the_name".to_string(), age: 18, }
     }
 }
+
+
+
+
 
 fn ui_example(
     mut egui_ctx: ResMut<EguiContext>,
     mut ui_state: ResMut<UiState>,
     assets: Res<AssetServer>,
+
+
+    mut query: Query<(&mut Transform, &RotRight)>,
+
+
 ) {
     //egui::CentralPanel::default().show(egui_ctx.ctx(), |ui| {        
         
@@ -71,6 +86,24 @@ fn ui_example(
             if ui.button("Increment").clicked() {
                 ui_state.value += 1.0;
             }
+
+
+            ui.add(egui::Slider::new(&mut ui_state.rotval, 0.0..= 1.0).text("rotval!"));
+            if ui.button("RotaBtn").clicked() {
+                 
+
+
+
+                //for (mut tf, rot) in query.iter_mut() { tf.rotate(Quat::from_rotation_z(0.2 )); }
+                for (mut tf, rot) in query.iter_mut() { tf.rotate(Quat::from_rotation_z( ui_state.rotval )); }
+
+
+
+
+            }
+
+
+
 
             ui.allocate_space(egui::Vec2::new(1.0, 50.0));
             ui.horizontal(|ui| {
@@ -166,8 +199,9 @@ fn setup(
                     transform: Transform::from_translation(brick_position),
                     ..Default::default()
                 //})
-                });
+                })
                 //.insert(Collider::Scorable);
+                .insert(RotRight);
         }
     }
 }
