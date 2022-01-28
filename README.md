@@ -1,6 +1,6 @@
 # Bevy_and_Egui
 
-trying to work with Bevy 0.6 + Egui
+trying to work with Bevy 0.6 + Egui thanks to bevy_egui
 
 DONE
 + rotation
