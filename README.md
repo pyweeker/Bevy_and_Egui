@@ -8,7 +8,7 @@ DONE
 
 + scale, dirty code in stroke paint
 + change color to GOLD when touching strocke widget because problem conversion <== expected enum `bevy::prelude::Color`, found struct `Color32`
-
++ press right arrow increment index indicator for later select entities and modify his attributes. 
 
 
 //mut queryRot: Query<(&mut Transform, &RotRight)>,
