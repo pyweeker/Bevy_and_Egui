@@ -25,6 +25,7 @@ DONE
 =============
 
 TODO
+Python logo on left side panel will display color + texture when pressing right arrow which increment index for current selected crab sprite
 
 - display info / hovering
 - single select / click
