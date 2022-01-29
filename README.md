@@ -9,7 +9,8 @@ DONE
 + scale, dirty code in stroke paint
 + change color to GOLD when touching strocke widget because problem conversion <== expected enum `bevy::prelude::Color`, found struct `Color32`
 + press right arrow increment index indicator for later select entities for inspection and modify his attributes. 
-
++ dirty random colors
++ transparent texture which in reality seems opaque or mask effect when applying new color
 
 //mut queryRot: Query<(&mut Transform, &RotRight)>,
 //mut queryVertimov: Query<(&mut Transform, &Vertimov)>,
@@ -24,7 +25,7 @@ DONE
 =============
 
 TODO
-- colors
+
 - display info / hovering
 - single select / click
 - multiselect / click and drag
