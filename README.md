@@ -27,6 +27,8 @@ DONE
 TODO
 Python logo on left side panel will display color + texture when pressing right arrow which increment index for current selected crab sprite
 
+-==>>> use /examples/2d/contrib.rs to select one entity only instead of mass effect
+
 - display info / hovering
 - single select / click
 - multiselect / click and drag
