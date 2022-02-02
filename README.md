@@ -11,6 +11,7 @@ DONE
 + press right arrow increment index indicator for later select entities for inspection and modify his attributes. 
 + dirty random colors
 + transparent texture which in reality seems opaque or mask effect when applying new color
++ right arrow increment index of current selected sprite, indicate it in Left Panel (logo only, his color not yet) , draws a square on selected sprite
 
 //mut queryRot: Query<(&mut Transform, &RotRight)>,
 //mut queryVertimov: Query<(&mut Transform, &Vertimov)>,
@@ -25,7 +26,7 @@ DONE
 =============
 
 TODO
-Python logo on left side panel will display color + texture when pressing right arrow which increment index for current selected crab sprite
+clone color of current selected sprite inside left panel ; unselect when pressing again and again right arrow.
 
 -==>>> use /examples/2d/contrib.rs to select one entity only instead of mass effect
 
