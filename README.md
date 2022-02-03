@@ -34,10 +34,13 @@ TODO
 
 
 URGENT
+
 - display info / hovering
 - single select / click
 - multiselect / click and drag
 
+
 BONUS
+
 -clone color of current selected sprite inside left panel ;
 -find interesting widgets
