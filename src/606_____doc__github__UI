@@ -6,6 +6,9 @@ https://github.com/emilk/egui/blob/master/egui/src/ui.rs
 
 allocate_painter   vers la ligne 500
 
+
+-==>>> use /examples/2d/contrib.rs to select one entity only instead of mass effect
+
 --------
 
 
