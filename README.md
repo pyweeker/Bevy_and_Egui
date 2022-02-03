@@ -31,15 +31,13 @@ DONE
 =============
 
 TODO
--clone color of current selected sprite inside left panel ; unselect when pressing again and again right arrow.
 
--change Color::hsla(hue, SATURATION_DESELECTED, LIGHTNESS_DESELECTED, ALPHA) with buttons
 
--Adapter for Color type coming from paint brush widget instead of gold hack.
--find interesting widgets
-
--==>>> use /examples/2d/contrib.rs to select one entity only instead of mass effect
-
+URGENT
 - display info / hovering
 - single select / click
 - multiselect / click and drag
+
+BONUS
+-clone color of current selected sprite inside left panel ;
+-find interesting widgets
