@@ -1,25 +1,20 @@
 https://stackoverflow.com/questions/66946558/how-to-read-mouse-motion-in-bevy
-
 https://stackoverflow.com/questions/66833652/how-to-add-event-to-system-set-in-bevy
-
-
 https://stackoverflow.com/search?page=2&tab=Relevance&q=bevy
-
-
 https://stackoverflow.com/questions/63675140/how-to-read-bevy-events-without-consuming-them
-
-
 https://docs.rs/bevy_app/latest/bevy_app/struct.Events.html
-
 https://docs.rs/egui/latest/egui/widgets/struct.ImageButton.html
-
 https://docs.rs/egui/latest/egui/struct.Response.html
-
 https://docs.rs/egui/latest/egui/widgets/trait.Widget.html#tymethod.ui
-
 https://github.com/mvlabat/bevy_egui/blob/main/examples/ui.rs                  painter
 
 
+
+
+
+https://stackoverflow.com/questions/63541917/reading-the-position-of-a-mouse-click-in-bevy
+https://stackoverflow.com/questions/66946558/how-to-read-mouse-motion-in-bevy
+https://stackoverflow.com/questions/65396065/what-is-an-acceptable-approach-to-dragging-sprites-with-bevy-0-4
 https://github.com/bevyengine/bevy/blob/main/crates/bevy_ui/src/ui_node.rs
 -------
 
