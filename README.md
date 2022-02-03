@@ -1,5 +1,10 @@
 # Bevy_and_Egui
 
+
+![alt text](https://github.com/pyweeker/Bevy_and_Egui/blob/main/Bevy_and_Egui_capture.jpeg)
+
+
+
 trying to work with Bevy 0.6 + Egui thanks to bevy_egui
 
 DONE
