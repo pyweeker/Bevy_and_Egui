@@ -41,6 +41,7 @@ URGENT
 - display info / hovering
 - single select / click
 - multiselect / click and drag
+- change cursor apparence when a unit has been selected
 
 
 BONUS
