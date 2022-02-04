@@ -7,6 +7,9 @@
 
 trying to work with Bevy 0.6 + Egui thanks to bevy_egui
 
+
+NEED HELP :  https://www.reddit.com/r/rust_gamedev/comments/sjnrsh/my_bevy_training_tuto_exercice_need_help_about/
+
 DONE
 + rotation
 + translation : introducing queryset due to 2 query on &mut Transform
