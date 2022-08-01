@@ -733,7 +733,7 @@ fn print_type_of_mut_version<T>(_: &mut T) {
 }
 
 fn index_board_system(
-    IndexBoard: Res<IndexBoard>,
+    index_board: Res<IndexBoard>,
     ui_state: ResMut<UiState>,
     mut query: Query<&mut Text>,
 ) {
