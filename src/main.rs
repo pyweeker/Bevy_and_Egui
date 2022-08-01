@@ -6,7 +6,6 @@ use rand::prelude::*;
 //++++++++
 //use bevy_egui::{egui::Widget};
 
-
 //use bevy_prototype_lyon::prelude::*;
 
 const BEVY_TEXTURE_ID: u64 = 0;
@@ -16,7 +15,6 @@ const BEVY_TEXTURE_ID_SECOND: u64 = 2;
 
 //const BRICK_COLOR: Color = Color::rgb(0.7, 0.7, 0.7);
 //const BRICK_COLOR: Color = Color::rgba(0.7, 0.7, 0.7, 0.5);
-
 
 //const SATURATION_DESELECTED: f32 = 0.3;
 //const LIGHTNESS_DESELECTED: f32 = 0.2;
@@ -28,36 +26,47 @@ const SATURATION_SELECTED: f32 = 0.9;
 const LIGHTNESS_SELECTED: f32 = 0.7;
 const ALPHA: f32 = 0.92;
 
-const TEXTURE_FILENAME0 : &str = "crab0.png";
-const TEXTURE_FILENAME1 : &str = "crab1.png";
-const TEXTURE_FILENAME2 : &str = "crab2.png";
-const TEXTURE_FILENAME3 : &str = "crab3.png";
+const TEXTURE_FILENAME0: &str = "crab0.png";
+const TEXTURE_FILENAME1: &str = "crab1.png";
+const TEXTURE_FILENAME2: &str = "crab2.png";
+const TEXTURE_FILENAME3: &str = "crab3.png";
 
-const TEXTURE_FILENAME4 : &str = "crab4.png";
-const TEXTURE_FILENAME5 : &str = "crab5.png";
-const TEXTURE_FILENAME6 : &str = "crab6.png";
-const TEXTURE_FILENAME7 : &str = "crab7.png";
-const TEXTURE_FILENAME8 : &str = "crab8.png";
+const TEXTURE_FILENAME4: &str = "crab4.png";
+const TEXTURE_FILENAME5: &str = "crab5.png";
+const TEXTURE_FILENAME6: &str = "crab6.png";
+const TEXTURE_FILENAME7: &str = "crab7.png";
+const TEXTURE_FILENAME8: &str = "crab8.png";
 
-const ARRAY_TEXTURE_FILENAME : [&str; 9] = [TEXTURE_FILENAME0, TEXTURE_FILENAME1, TEXTURE_FILENAME2, TEXTURE_FILENAME3, TEXTURE_FILENAME4, TEXTURE_FILENAME5, TEXTURE_FILENAME6, TEXTURE_FILENAME7, TEXTURE_FILENAME8];
+const ARRAY_TEXTURE_FILENAME: [&str; 9] = [
+    TEXTURE_FILENAME0,
+    TEXTURE_FILENAME1,
+    TEXTURE_FILENAME2,
+    TEXTURE_FILENAME3,
+    TEXTURE_FILENAME4,
+    TEXTURE_FILENAME5,
+    TEXTURE_FILENAME6,
+    TEXTURE_FILENAME7,
+    TEXTURE_FILENAME8,
+];
 
 const NORMAL_BUTTON: Color = Color::rgb(0.15, 0.15, 0.15);
 const HOVERED_BUTTON: Color = Color::rgb(0.25, 0.25, 0.25);
 const PRESSED_BUTTON: Color = Color::rgb(0.35, 0.75, 0.35);
 
-
-fn rnd_pick_filename<'a>(array_names: &'a[&str; 9]) -> &'a str {
-    let pickedName = array_names.choose(&mut rand::thread_rng());
-    println!("__Call fn rnd_pick_filename  => give std::option::Option<&&str>    unwraping it = {}", pickedName.unwrap());
-    return pickedName.unwrap();    
+fn rnd_pick_filename<'a>(array_names: &'a [&str; 9]) -> &'a str {
+    let picked_name = array_names.choose(&mut rand::thread_rng());
+    println!(
+        "__Call fn rnd_pick_filename  => give std::option::Option<&&str>    unwraping it = {}",
+        picked_name.unwrap()
+    );
+    return picked_name.unwrap();
 }
 
+#[derive(Component)]
+struct RotRight;
 
 #[derive(Component)]
-struct RotRight; 
-
-#[derive(Component)]
-struct Vertimov; 
+struct Vertimov;
 
 #[derive(Component)]
 struct ScalMorph;
@@ -71,20 +80,19 @@ struct TextureNameCompo<'a> {
 }
 
 #[derive(Component)]
-struct Idx_of_entity {
+struct IdxOfEntity {
     idx: usize,
 }
 
-impl Idx_of_entity {
-fn show_details(self: &Self) {
-    println!("The employee ID is {}", self.idx);
-    }  
+impl IdxOfEntity {
+    fn show_details(self: &Self) {
+        println!("The employee ID is {}", self.idx);
+    }
 }
-
 
 //...............................................
 #[derive(Component)]
-struct Color_Tracker {
+struct ColorTracker {
     color_tracked: bevy::prelude::Color,
 }
 //...............................................
@@ -93,45 +101,33 @@ struct Color_Tracker {
 struct Fluo;
 
 #[derive(Component)]
-struct Cleaner_job {
+struct CleanerJob {
     index_of_owner: usize,
-
 }
-
 
 //#[derive(Component, Widget)]       //   `Widget` is imported here, but it is only a trait, without a derive macro
 #[derive(Component)]
-struct Compo_egui_widget;
-
+struct CompoEguiWidget;
 
 fn main() {
     App::new()
-        
         .insert_resource(ClearColor(Color::rgb(1.0, 0.0, 0.0)))
         .insert_resource(Msaa { samples: 4 })
-        
-        .insert_resource(indexboard { idx: None })
-
+        .insert_resource(IndexBoard { idx: None })
         .init_resource::<UiState>()
         .add_plugins(DefaultPlugins)
         .add_plugin(EguiPlugin)
-
-        .add_startup_system(setup.system())        
-
+        .add_startup_system(setup)
         .add_system(ui_example)
-
         .add_system(keyboard_system)
-
-        .add_system(indexboard_system) // besoin de le mettre dans le system ? (cycles de refresh ?)
-
+        .add_system(index_board_system) // besoin de le mettre dans le system ? (cycles de refresh ?)
         .add_system(fluo_system)
         .add_system(clean_colored_rect_system)
         .add_system(button_system)
-
         .run();
 }
 
-struct indexboard {
+struct IndexBoard {
     //idx: usize,
     idx: Option<usize>,
 }
@@ -150,7 +146,7 @@ struct UiState {
     inverted: bool,
 
     name: String,
-    age: u32 ,
+    age: u32,
 
     current_target_idx: Option<usize>,
     current_png_String: String,
@@ -163,40 +159,49 @@ struct UiState {
 }
 
 impl Default for UiState {
-    fn default() -> Self {        
-        UiState { scalvalue: 1.2, rotval: 0.1, vertimov: -50.0, painting: Painting::default(), inverted: true, name: "the_name".to_string(), age: 18, current_target_idx: None, current_png_String: "".to_string(), vec_entities: Vec::<Entity>::new(), vec_texturenames: Vec::<&str>::new(), vec_entities_colors: Vec::<bevy::render::color::Color>::new()}
+    fn default() -> Self {
+        UiState {
+            scalvalue: 1.2,
+            rotval: 0.1,
+            vertimov: -50.0,
+            painting: Painting::default(),
+            inverted: true,
+            name: "the_name".to_string(),
+            age: 18,
+            current_target_idx: None,
+            current_png_String: "".to_string(),
+            vec_entities: Vec::<Entity>::new(),
+            vec_texturenames: Vec::<&str>::new(),
+            vec_entities_colors: Vec::<bevy::render::color::Color>::new(),
+        }
     }
 }
 
-
-fn make_colored_rect(mut commands: Commands,) {
-
+fn make_colored_rect(mut commands: Commands) {
     let mut rnd = rand::thread_rng();
 
     let hue = rnd.gen_range(0.0..=360.0);
     let brick_position = Vec3::new(300.0, 300.0, 0.0);
 
-
     let mut colored_rect = commands.spawn();
-        colored_rect.insert_bundle(SpriteBundle {
-            sprite: Sprite {
-                custom_size: Some(Vec2::new(128.0, 128.0)),
-                //color: Color::hsla(hue, SATURATION_DESELECTED, LIGHTNESS_DESELECTED, ALPHA),
-                //color: the_color,
-                color: Color::hsla(hue, 0.5, 0.5, 0.7),
-                ..Default::default()
-                },
-            //texture: asset_server.load(rnd_pick_filename(&ARRAY_TEXTURE_FILENAME)),
-            //texture: asset_server.load(picked_name),
-            transform: Transform::from_translation(brick_position),
+    colored_rect.insert_bundle(SpriteBundle {
+        sprite: Sprite {
+            custom_size: Some(Vec2::new(128.0, 128.0)),
+            //color: Color::hsla(hue, SATURATION_DESELECTED, LIGHTNESS_DESELECTED, ALPHA),
+            //color: the_color,
+            color: Color::hsla(hue, 0.5, 0.5, 0.7),
             ..Default::default()
-        });
+        },
+        //texture: asset_server.load(rnd_pick_filename(&ARRAY_TEXTURE_FILENAME)),
+        //texture: asset_server.load(picked_name),
+        transform: Transform::from_translation(brick_position),
+        ..Default::default()
+    });
 }
 
 //+++++
 
 fn make_colored_rect_with_transform(mut commands: Commands, tf: Transform) {
-
     //let mut rnd = rand::thread_rng();
 
     //let hue = rnd.gen_range(0.0..=360.0);
@@ -205,69 +210,48 @@ fn make_colored_rect_with_transform(mut commands: Commands, tf: Transform) {
     //let brick_position = Vec3::new(300.0, 300.0, 0.0);
     let the_tf_translation = tf.translation;
 
-    
-
-
     let mut colored_rect = commands.spawn();
-        colored_rect.insert_bundle(SpriteBundle {
-            sprite: Sprite {
-                custom_size: Some(Vec2::new(128.0, 128.0)),
-                //color: Color::hsla(hue, SATURATION_DESELECTED, LIGHTNESS_DESELECTED, ALPHA),
-                //color: the_color,
-                color: Color::hsla(hue, 0.5, 0.5, 0.3),
-                ..Default::default()
-                },
-            //texture: asset_server.load(rnd_pick_filename(&ARRAY_TEXTURE_FILENAME)),
-            //texture: asset_server.load(picked_name),
-            transform: Transform::from_translation(the_tf_translation),
+    colored_rect.insert_bundle(SpriteBundle {
+        sprite: Sprite {
+            custom_size: Some(Vec2::new(128.0, 128.0)),
+            //color: Color::hsla(hue, SATURATION_DESELECTED, LIGHTNESS_DESELECTED, ALPHA),
+            //color: the_color,
+            color: Color::hsla(hue, 0.5, 0.5, 0.3),
             ..Default::default()
-        });
+        },
+        //texture: asset_server.load(rnd_pick_filename(&ARRAY_TEXTURE_FILENAME)),
+        //texture: asset_server.load(picked_name),
+        transform: Transform::from_translation(the_tf_translation),
+        ..Default::default()
+    });
 }
 
 ///_____
 
-fn fluo_system(mut commands: Commands, queryFluo: Query<(&Fluo, &Transform)>,) {
-
+fn fluo_system(mut commands: Commands, queryFluo: Query<(&Fluo, &Transform)>) {
     //let mut rnd = rand::thread_rng();
 
     //let hue = rnd.gen_range(0.0..=360.0);
     let hue180 = 180.0;
     //let brick_position = Vec3::new(300.0, 300.0, 0.0);
 
-
     for (_, target_tf) in queryFluo.iter() {
         //let mut target_fluo_tf = Transform::from_translation(target_tf);  //  expected struct `bevy::prelude::Vec3`, found `&bevy::prelude::Transform`
         //let mut target_fluo_tf = target_tf; // trait copy ?
         let mut target_fluo_tf = target_tf.clone(); // trait copy ?
-     
 
-
-
-     let mut fluo_rect = commands.spawn();
+        let mut fluo_rect = commands.spawn();
         fluo_rect.insert_bundle(SpriteBundle {
             sprite: Sprite {
                 custom_size: Some(Vec2::new(135.0, 135.0)),
                 color: Color::hsla(hue180, 0.5, 0.5, 0.2),
                 ..Default::default()
-                },
+            },
             transform: target_fluo_tf,
             ..Default::default()
         });
-
-
-
     }
-
-
-    
 }
-
-
-
-
-
-
-
 
 fn ui_example(
     mut egui_ctx: ResMut<EguiContext>,
@@ -275,30 +259,22 @@ fn ui_example(
     mut ui_state: ResMut<UiState>,
     assets: Res<AssetServer>,
 
-
     //mut queryRot: Query<(&mut Transform, &RotRight)>,
     //mut queryVertimov: Query<(&mut Transform, &Vertimov)>,
-
-
-    mut q: QuerySet<(
-        QueryState<&mut Transform, With<RotRight>>,  
-        QueryState<&mut Transform, With<Vertimov>>,
-        QueryState<&mut Sprite>,
-        QueryState<&mut Transform, With<ScalMorph>>,
+    mut q: ParamSet<(
+        Query<&mut Transform, With<RotRight>>,
+        Query<&mut Transform, With<Vertimov>>,
+        Query<&mut Sprite>,
+        Query<&mut Transform, With<ScalMorph>>,
     )>,
-
-
 ) {
-    
-
-
     let mut load = false;
     let mut remove = false;
     let mut invert = false;
 
     egui::SidePanel::left("side_panel")
         .default_width(100.0)
-        .show(egui_ctx.ctx(), |ui| {
+        .show(egui_ctx.ctx_mut(), |ui| {
             ui.heading("Side Panel");
 
             ui.horizontal(|ui| {
@@ -309,41 +285,31 @@ fn ui_example(
             ui.add(egui::Slider::new(&mut ui_state.scalvalue, 0.5..=2.0).text("scalvalue"));
             if ui.button("ScaleBtn").clicked() {
                 //ui_state.scalvalue += 1.0;
-                for mut tf in q.q3().iter_mut() {tf.scale *= ui_state.scalvalue;}
+                for mut tf in q.p3().iter_mut() {
+                    tf.scale *= ui_state.scalvalue;
+                }
             }
 
-
-            ui.add(egui::Slider::new(&mut ui_state.rotval, 0.0..= 1.0).text("rotval!"));
+            ui.add(egui::Slider::new(&mut ui_state.rotval, 0.0..=1.0).text("rotval!"));
             if ui.button("RotaBtn").clicked() {
-                
                 //for (mut tf, rot) in queryRot.iter_mut() { tf.rotate(Quat::from_rotation_z( ui_state.rotval )); }
 
-                for mut tf in q.q0().iter_mut() { tf.rotate(Quat::from_rotation_z( ui_state.rotval )); }
+                for mut tf in q.p0().iter_mut() {
+                    tf.rotate(Quat::from_rotation_z(ui_state.rotval));
+                }
             }
 
-
-            ui.add(egui::Slider::new(&mut ui_state.vertimov, -80.0..= 10.0).text("vertimov!"));
+            ui.add(egui::Slider::new(&mut ui_state.vertimov, -80.0..=10.0).text("vertimov!"));
             if ui.button("VertimovBtn").clicked() {
-                
                 //for (mut tf, vertimov) in queryVertimov.iter_mut() { tf.translation.y += ui_state.vertimov ; }
 
-                for mut tf in q.q1().iter_mut() { tf.translation.y += ui_state.vertimov ; }
-
-
+                for mut tf in q.p1().iter_mut() {
+                    tf.translation.y += ui_state.vertimov;
+                }
             }
 
-
-
-
-
             //ui_state.painting.ui_control(ui);
-            ui_state.painting.ui_control(ui, q.q2());
-
-
-
-
-
-
+            ui_state.painting.ui_control(ui, q.p2());
 
             ui.allocate_space(egui::Vec2::new(1.0, 50.0));
             ui.horizontal(|ui| {
@@ -365,16 +331,13 @@ fn ui_example(
                     [128.0, 128.0],
                 ));
                 ui.separator();
-                
+
                 let machin = ui.add(egui::widgets::Image::new(
                     egui::TextureId::User(BEVY_TEXTURE_ID_SECOND),
                     [128.0, 128.0],
                 ));
 
-                //machin.insert(Color_Tracker);
-
-            
-            
+                //machin.insert(ColorTracker);
             });
             //.response
 
@@ -384,11 +347,7 @@ fn ui_example(
             //));
 
             ui.separator();
-
-
-
-
-     });
+        });
     //-----------
 
     if invert {
@@ -400,41 +359,45 @@ fn ui_example(
         } else {
             assets.load("icon.png")
         };
-        egui_ctx.set_egui_texture(BEVY_TEXTURE_ID, texture_handle);
+        egui_ctx.add_image(texture_handle);
     }
     if remove {
-        egui_ctx.remove_egui_texture(BEVY_TEXTURE_ID);
+        let texture_handle = if ui_state.inverted {
+            assets.load("icon_inverted.png")
+        } else {
+            assets.load("icon.png")
+        };
+
+        egui_ctx.remove_image(&texture_handle);
     }
 
-
-
-
     match ui_state.current_png_String.as_str() {
-        "" => {let texture_handle_ONE = assets.load("python_icon.png"); egui_ctx.set_egui_texture(BEVY_TEXTURE_ID_ONE, texture_handle_ONE); let texture_handle_SECOND = assets.load("white_square_128.png") ;egui_ctx.set_egui_texture(BEVY_TEXTURE_ID_SECOND, texture_handle_SECOND);},
+        "" => {
+            let texture_handle_one = assets.load("python_icon.png");
+            egui_ctx.add_image(texture_handle_one);
+            let texture_handle_second = assets.load("white_square_128.png");
+            egui_ctx.add_image(texture_handle_second);
+        }
         //"b" => println!("1"),
         //"c" => println!("2"),
-        _ => {let texture_handle_ONE = assets.load(ui_state.current_png_String.as_str()); egui_ctx.set_egui_texture(BEVY_TEXTURE_ID_ONE, texture_handle_ONE);},
+        _ => {
+            let texture_handle_one = assets.load(ui_state.current_png_String.as_str());
+            egui_ctx.add_image(texture_handle_one);
+        }
+    }
 
-    
-}
+    //if  ==
 
-    //if  == 
-
-    //let texture_handle_ONE = assets.load("python_icon.png");
-    //egui_ctx.set_egui_texture(BEVY_TEXTURE_ID_ONE, texture_handle_ONE);
+    //let texture_handle_one = assets.load("python_icon.png");
+    //egui_ctx.add_image(BEVY_TEXTURE_ID_ONE, texture_handle_one);
 
     //-----------
-    
 }
-
 
 //fn interview_crab(fresh_texture_name: &str) {
 //    let fresh_texture_handle = assets.load(fresh_texture_name);
-//    egui_ctx.set_egui_texture(BEVY_TEXTURE_ID_ONE, fresh_texture_handle);
+//    egui_ctx.add_image(BEVY_TEXTURE_ID_ONE, fresh_texture_handle);
 //}
-
-
-
 
 #[derive(Debug)]
 struct Painting {
@@ -451,21 +414,14 @@ impl Default for Painting {
     }
 }
 
-
-
-
-
-
-
-
-
-
 impl Painting {
-
-
     //pub fn ui_control(&mut self, ui: &mut egui::Ui) -> egui::Response {
     //pub fn ui_control(&mut self, ui: &mut egui::Ui, mut query: Query<(&mut Transform, &ScalMorph)>) -> egui::Response {
-    pub fn ui_control(&mut self, ui: &mut egui::Ui, mut query: Query<(&mut Sprite)>) -> egui::Response {
+    pub fn ui_control(
+        &mut self,
+        ui: &mut egui::Ui,
+        mut query: Query<&mut Sprite>,
+    ) -> egui::Response {
         ui.horizontal(|ui| {
             egui::stroke_ui(ui, &mut self.stroke, "Stroke");
             ui.separator();
@@ -480,12 +436,12 @@ impl Painting {
 
                 //for mut sprt in query.iter_mut() {sprt.color = bevy::prelude::Color::as_rgba(&self.stroke.color);}
 
-                for mut sprt in query.iter_mut() {sprt.color = bevy::prelude::Color::GOLD }
-
+                for mut sprt in query.iter_mut() {
+                    sprt.color = bevy::prelude::Color::GOLD
+                }
 
                 //bevy::prelude::Color::as_rgba(&self.stroke.color)
             }
-
 
             if ui.button("PALETTE !").clicked() {
                 //self.lines.clear();
@@ -494,31 +450,25 @@ impl Painting {
 
                 print_type_of(&self.stroke.color);
 
-                
                 let col0 = *&self.stroke.color[0] as f32;
                 let col1 = *&self.stroke.color[1].clone() as f32;
                 let col2 = *&self.stroke.color[2].clone() as f32;
                 let col3 = *&self.stroke.color[3].clone() as f32;
 
-                for mut sprt in query.iter_mut() {sprt.color = bevy::prelude::Color::rgba(col0, col1, col2, col3) }
-
-
-
-
+                for mut sprt in query.iter_mut() {
+                    sprt.color = bevy::prelude::Color::rgba(col0, col1, col2, col3)
+                }
             }
         })
         .response
     }
 
-// https://bevy-cheatbook.github.io/pitfalls/ui-y-up.html      pitfalls
-
+    // https://bevy-cheatbook.github.io/pitfalls/ui-y-up.html      pitfalls
 
     pub fn ui_content(&mut self, ui: &mut egui::Ui) {
         //let (response, painter) =
-            //ui.allocate_painter(ui.available_size_before_wrap(), egui::Sense::drag());
+        //ui.allocate_painter(ui.available_size_before_wrap(), egui::Sense::drag());
         //let rect = response.rect;
-
-        
     }
 }
 
@@ -530,24 +480,20 @@ fn setup(
     asset_server: Res<AssetServer>,
 
     //mut segments_res: ResMut<SnakeSegments>,
-    
+
     //segments: Vec<Entity>,
     mut ui_state: ResMut<UiState>,
-
 ) {
-
     // cameras
     commands.spawn_bundle(OrthographicCameraBundle::new_2d());
     commands.spawn_bundle(UiCameraBundle::default());
-    
 
     // Add bricks
- 
+
     let brick_rows = 3;
     let brick_columns = 5;
 
     let brick_spacing = 50.0;
-
 
     let brick_size = Vec2::new(128.0, 128.0);
 
@@ -555,18 +501,9 @@ fn setup(
     // center the bricks and move them up a bit
     //let bricks_offset = Vec3::new(-(bricks_width - brick_size.x) / 2.0, 100.0, 0.0);
 
-    let bricks_offset = Vec3::new(-100.0,-150.0, 0.0);
-    
-
-
+    let bricks_offset = Vec3::new(-100.0, -150.0, 0.0);
 
     let mut rnd = rand::thread_rng();
-
-    
-
-
-
-
 
     for row in 0..brick_rows {
         let y_position = row as f32 * (brick_size.y + brick_spacing);
@@ -578,7 +515,6 @@ fn setup(
             ) + bricks_offset;
             // brick
 
-
             let hue = rnd.gen_range(0.0..=360.0);
 
             let the_color = Color::hsla(hue, SATURATION_DESELECTED, LIGHTNESS_DESELECTED, ALPHA);
@@ -589,40 +525,35 @@ fn setup(
 
             print_type_of(&picked_name);
 
-
             //let new_entity = commands.spawn().id();
             let mut new_entity = commands.spawn();
-            new_entity.insert_bundle(SpriteBundle {
-                sprite: Sprite {
-                    custom_size: Some(Vec2::new(128.0, 128.0)),
-                    //color: Color::hsla(hue, SATURATION_DESELECTED, LIGHTNESS_DESELECTED, ALPHA),
-                    color: the_color,
-                    ..Default::default()
+            new_entity
+                .insert_bundle(SpriteBundle {
+                    sprite: Sprite {
+                        custom_size: Some(Vec2::new(128.0, 128.0)),
+                        //color: Color::hsla(hue, SATURATION_DESELECTED, LIGHTNESS_DESELECTED, ALPHA),
+                        color: the_color,
+                        ..Default::default()
                     },
-                //texture: asset_server.load(rnd_pick_filename(&ARRAY_TEXTURE_FILENAME)),
-                texture: asset_server.load(picked_name),
-                transform: Transform::from_translation(brick_position),
-                ..Default::default()
-            })
-
-
-            .insert(RotRight)
-            .insert(Vertimov)
-            .insert(ScalMorph)
-            .insert(KeyboardTargetable)
-
-            .insert(Contributor { hue },)
-            .insert(TextureNameCompo { texture_filename: picked_name },)
-
-
-            .insert(Idx_of_entity { idx: ui_state.vec_entities.len() },) //;
-
-            //.insert(Interaction::None);
-            //.insert(Interaction::Hovered);
-
-            .insert(Compo_egui_widget);
-
-                
+                    //texture: asset_server.load(rnd_pick_filename(&ARRAY_TEXTURE_FILENAME)),
+                    texture: asset_server.load(picked_name),
+                    transform: Transform::from_translation(brick_position),
+                    ..Default::default()
+                })
+                .insert(RotRight)
+                .insert(Vertimov)
+                .insert(ScalMorph)
+                .insert(KeyboardTargetable)
+                .insert(Contributor { hue })
+                .insert(TextureNameCompo {
+                    texture_filename: picked_name,
+                })
+                .insert(IdxOfEntity {
+                    idx: ui_state.vec_entities.len(),
+                }) //;
+                //.insert(Interaction::None);
+                //.insert(Interaction::Hovered);
+                .insert(CompoEguiWidget);
 
             ui_state.vec_entities.push(new_entity.id());
             ui_state.vec_texturenames.push(picked_name);
@@ -630,8 +561,7 @@ fn setup(
         }
     }
 
-
-    // indexboard
+    // IndexBoard
     commands.spawn_bundle(TextBundle {
         text: Text {
             sections: vec![
@@ -672,27 +602,27 @@ fn setup(
 fn keyboard_system(
     keyboard_input: Res<Input<KeyCode>>,
     //mut query: Query<(&KeyboardTargetable, &mut Transform)>,
-
     mut ui_state: ResMut<UiState>,
 
     mut query: Query<(&KeyboardTargetable, &Transform)>, // LOOK only
 
-    mut queryIDX: Query<(Entity, &Idx_of_entity)>,
+    mut queryIDX: Query<(Entity, &IdxOfEntity)>,
 
-    //queryIdxNametextur: Query<(&Idx_of_entity, &TextureNameCompo)>,  // lifetime `'static` required
-    queryIdx_Nametextur_and_Transform: Query<(&'static Idx_of_entity, &'static TextureNameCompo, &Transform)>,
+    //queryIdxNametextur: Query<(&IdxOfEntity, &TextureNameCompo)>,  // lifetime `'static` required
+    queryIdx_Nametextur_and_Transform: Query<(
+        &'static IdxOfEntity,
+        &'static TextureNameCompo,
+        &Transform,
+    )>,
 
     mut egui_ctx: ResMut<EguiContext>,
     assets: Res<AssetServer>,
 
     mut commands: Commands,
-
 ) {
-    
     //  https://bevy-cheatbook.github.io/features/input-handling.html
 
     if keyboard_input.just_pressed(KeyCode::Right) {
-
         println!(" keyboard_input.just_pressed(KeyCode::Right) ");
 
         if ui_state.current_target_idx.is_none() {
@@ -701,85 +631,94 @@ fn keyboard_system(
             println!(" ... NOW ui_state.current_target_idx = Some(0)");
 
             let current_usize: usize = ui_state.current_target_idx.unwrap();
-            println!(" ui_state.vec_texturenames[current_usize] = {} ", ui_state.vec_texturenames[current_usize]);
+            println!(
+                " ui_state.vec_texturenames[current_usize] = {} ",
+                ui_state.vec_texturenames[current_usize]
+            );
 
-            let fresh_selected_texture_handle_ONE = assets.load(ui_state.vec_texturenames[current_usize]);
-            egui_ctx.set_egui_texture(BEVY_TEXTURE_ID_ONE, fresh_selected_texture_handle_ONE);
+            let fresh_selected_texture_handle_one =
+                assets.load(ui_state.vec_texturenames[current_usize]);
+            egui_ctx.add_image(fresh_selected_texture_handle_one);
             ui_state.current_png_String = ui_state.vec_texturenames[current_usize].to_string();
 
-            for (idx_of_e, texturename, tf) in queryIdx_Nametextur_and_Transform.iter() {                  
-
+            for (idx_of_e, texturename, tf) in queryIdx_Nametextur_and_Transform.iter() {
                 if idx_of_e.idx == current_usize {
                     let hue = 180.0;
                     let the_tf_translation = tf.translation;
 
                     let mut colored_rect = commands.spawn();
-                        colored_rect.insert_bundle(SpriteBundle {
-                            sprite: Sprite {
-                                custom_size: Some(Vec2::new(128.0, 128.0)),
-                                //color: Color::hsla(hue, SATURATION_DESELECTED, LIGHTNESS_DESELECTED, ALPHA),
-                                color: Color::hsla(hue, 0.5, 0.5, 0.3),
-                                ..Default::default()
-                                },
-                            //texture: asset_server.load(picked_name),
-                            transform: Transform::from_translation(the_tf_translation),
+                    colored_rect.insert_bundle(SpriteBundle {
+                        sprite: Sprite {
+                            custom_size: Some(Vec2::new(128.0, 128.0)),
+                            //color: Color::hsla(hue, SATURATION_DESELECTED, LIGHTNESS_DESELECTED, ALPHA),
+                            color: Color::hsla(hue, 0.5, 0.5, 0.3),
                             ..Default::default()
-                        });
-                    colored_rect.insert(Cleaner_job {index_of_owner: idx_of_e.idx});
+                        },
+                        //texture: asset_server.load(picked_name),
+                        transform: Transform::from_translation(the_tf_translation),
+                        ..Default::default()
+                    });
+                    colored_rect.insert(CleanerJob {
+                        index_of_owner: idx_of_e.idx,
+                    });
                 }
-            }            
-
+            }
         } else {
-
             let previous = ui_state.current_target_idx.unwrap();
             let nextone = previous + 1;
-            ui_state.current_target_idx = Some(nextone);  
+            ui_state.current_target_idx = Some(nextone);
 
             print_type_of_mut_version(&mut ui_state.current_target_idx);
-            println!(" ui_state.current_target_idx = {:?} ", ui_state.current_target_idx);
+            println!(
+                " ui_state.current_target_idx = {:?} ",
+                ui_state.current_target_idx
+            );
             let current_usize: usize = ui_state.current_target_idx.unwrap();
-            println!(" ui_state.vec_texturenames[current_usize] = {} ", ui_state.vec_texturenames[current_usize]);
+            println!(
+                " ui_state.vec_texturenames[current_usize] = {} ",
+                ui_state.vec_texturenames[current_usize]
+            );
 
-            let fresh_selected_texture_handle_ONE = assets.load(ui_state.vec_texturenames[current_usize]);
-            egui_ctx.set_egui_texture(BEVY_TEXTURE_ID_ONE, fresh_selected_texture_handle_ONE);
+            let fresh_selected_texture_handle_one =
+                assets.load(ui_state.vec_texturenames[current_usize]);
+            egui_ctx.add_image(fresh_selected_texture_handle_one);
 
             ui_state.current_png_String = ui_state.vec_texturenames[current_usize].to_string();
 
-            for (idx_of_e, texturename, tf) in queryIdx_Nametextur_and_Transform.iter() {                  
-
+            for (idx_of_e, texturename, tf) in queryIdx_Nametextur_and_Transform.iter() {
                 if idx_of_e.idx == current_usize {
                     let hue = 180.0;
                     let the_tf_translation = tf.translation;
 
                     let mut colored_rect = commands.spawn();
-                        colored_rect.insert_bundle(SpriteBundle {
-                            sprite: Sprite {
-                                custom_size: Some(Vec2::new(128.0, 128.0)),
-                                //color: Color::hsla(hue, SATURATION_DESELECTED, LIGHTNESS_DESELECTED, ALPHA),
-                                color: Color::hsla(hue, 0.5, 0.5, 0.3),
-                                ..Default::default()
-                                },
-                            //texture: asset_server.load(picked_name),
-                            transform: Transform::from_translation(the_tf_translation),
+                    colored_rect.insert_bundle(SpriteBundle {
+                        sprite: Sprite {
+                            custom_size: Some(Vec2::new(128.0, 128.0)),
+                            //color: Color::hsla(hue, SATURATION_DESELECTED, LIGHTNESS_DESELECTED, ALPHA),
+                            color: Color::hsla(hue, 0.5, 0.5, 0.3),
                             ..Default::default()
-                        });
+                        },
+                        //texture: asset_server.load(picked_name),
+                        transform: Transform::from_translation(the_tf_translation),
+                        ..Default::default()
+                    });
 
-                    colored_rect.insert(Cleaner_job {index_of_owner: idx_of_e.idx});
+                    colored_rect.insert(CleanerJob {
+                        index_of_owner: idx_of_e.idx,
+                    });
                 }
-            }            
+            }
         }
     }
 
     if keyboard_input.just_pressed(KeyCode::Space) {
+        for (idx_of_e, texturename, tf) in queryIdx_Nametextur_and_Transform.iter() {
+            println!(
 
-    for (idx_of_e, texturename, tf) in queryIdx_Nametextur_and_Transform.iter() {  
-
-        println!(
-                
-                "   idx_of_e.idx  =  {}    ;    texturename.texture_filename = {}     tf.translation = {} ",                
+                "   idx_of_e.idx  =  {}    ;    texturename.texture_filename = {}     tf.translation = {} ",
                 idx_of_e.idx, texturename.texture_filename, tf.translation.y
             );
-    }
+        }
     }
 }
 
@@ -793,28 +732,36 @@ fn print_type_of_mut_version<T>(_: &mut T) {
     println!("{}", std::any::type_name::<T>())
 }
 
-fn indexboard_system(indexboard: Res<indexboard>, ui_state: ResMut<UiState>, mut query: Query<&mut Text>) {
+fn index_board_system(
+    index_board: Res<IndexBoard>,
+    ui_state: ResMut<UiState>,
+    mut query: Query<&mut Text>,
+) {
     let mut text = query.single_mut();
 
-    if let Some(s) = ui_state.current_target_idx {        
-        text.sections[1].value = format!("{}", ui_state.current_target_idx.unwrap());        
-    } 
+    if let Some(s) = ui_state.current_target_idx {
+        text.sections[1].value = format!("{}", ui_state.current_target_idx.unwrap());
+    }
 }
 
 fn clean_colored_rect_system(
     mut ui_state: ResMut<UiState>,
-    mut commands: Commands, 
-    mut query_cleanable: Query<(Entity, &Cleaner_job)>,
-    
-    ) {
-        let current_usize : Option<usize>;
-        current_usize = ui_state.current_target_idx;
-        match current_usize {            
-            None => {},
-            _ => for (e, cj) in query_cleanable.iter() {if cj.index_of_owner != current_usize.unwrap() {commands.entity(e).despawn(); }},
+    mut commands: Commands,
+    mut query_cleanable: Query<(Entity, &CleanerJob)>,
+) {
+    let current_usize: Option<usize>;
+    current_usize = ui_state.current_target_idx;
+    match current_usize {
+        None => {}
+        _ => {
+            for (e, cj) in query_cleanable.iter() {
+                if cj.index_of_owner != current_usize.unwrap() {
+                    commands.entity(e).despawn();
+                }
+            }
+        }
     }
 }
-
 
 ////
 
@@ -846,33 +793,27 @@ fn button_system(
 }
 */
 
-
-
-
 fn button_system(
     mut interaction_query: Query<
         //(&Interaction),
         &Interaction,
-        (Changed<Interaction>, With<Idx_of_entity>),
-        >,
-    
+        (Changed<Interaction>, With<IdxOfEntity>),
+    >,
 ) {
-    
     for interaction in interaction_query.iter_mut() {
-        
         match *interaction {
             Interaction::Clicked => {
                 //text.sections[0].value = "Press".to_string();
                 //*color = PRESSED_BUTTON.into();
-                
-                //println!("Clicked   {}", Idx_of_entity::idx);
+
+                //println!("Clicked   {}", IdxOfEntity::idx);
                 println!("Clicked   ");
             }
             Interaction::Hovered => {
                 //text.sections[0].value = "Hover".to_string();
                 //*color = HOVERED_BUTTON.into();
-                
-                //println!("Hovered   {}", Idx_of_entity.idx);
+
+                //println!("Hovered   {}", IdxOfEntity.idx);
                 println!("Hovered   ");
             }
             Interaction::None => {
@@ -887,7 +828,7 @@ fn button_system(
 /*
 
 fn tag_entites_to_be_widget(
-    mut entities_to_tag_query: Query<(Entity, With<Idx_of_entity>),>,) {
+    mut entities_to_tag_query: Query<(Entity, With<IdxOfEntity>),>,) {
 
     //let tag_entities_widget = |e| impl Widget for &mut e { };        expected expression
     //let tag_entities_widget = |e| impl Widget for &mut e { }      expected expression
